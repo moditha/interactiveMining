@@ -80,12 +80,13 @@ public class Main {
 				   }
 				   	answer= s1.nextInt();
 				   	if(answer==1){
-						sampling = new Freq_Sampling(SearchResult);
-						sample=sampling.getSample();
+				   		//System.out.println("search result to sampling"+ SearchResult.size() + " " + SearchResult.get(0).size());
+				   		Freq_Sampling sampling1= new Freq_Sampling(SearchResult);
+						sample=sampling1.getSample();
 				   	}
 					if(answer==2){
-						sampling = new Area_Sampling(SearchResult);
-						sample=sampling.getSample();
+						Area_Sampling sampling2 = new Area_Sampling(SearchResult);
+						sample=sampling2.getSample();
 					}
 	
 				}

@@ -16,6 +16,7 @@ public class Search {
 
 	
 	public void doSearch(){
+		searchResult = new LinkedList<>();
 		System.out.println("Which item are you looking for?");
 		Scanner s = new Scanner(System.in);
 		searching=s.nextInt();
@@ -24,6 +25,7 @@ public class Search {
 			for(int j=0; j<matrix.get(i).size();j++){
 				if(matrix.get(i).get(j)==searching){
 					addtoSearchResults(i);
+					System.out.println("SEARCH RESULTS SIZE " + searchResult.size());
 				}
 			}
 		}

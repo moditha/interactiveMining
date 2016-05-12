@@ -25,6 +25,7 @@ public class Sampling {
 	public Sampling (LinkedList<LinkedList> matrix) {
 		System.out.println("Entered Frequency sampling");
 		this.matrixinput = matrix;
+		System.out.println("MATRIX SIZE!" + matrixinput.size());
 		create_weights();
 		calculateSample();
 		calculateOutputPatterns();
@@ -41,11 +42,12 @@ public class Sampling {
 		this.weights = new int[n_tuples];
 		for (int i=0; i<n_tuples;i++){
 			int w =matrixinput.get(i).size();
-			int we =(2^w) - 1;
+			int we =(int) (Math.pow(2, w)-1);
+				
 			weights[i] =we;
 			powerSetSum = powerSetSum + we;
 		}
-		System.out.println("Weights matrix created " + weights.length);
+		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
 	}
  
 	
