@@ -25,7 +25,6 @@ public class Sampling {
 	public Sampling (LinkedList<LinkedList> matrix) {
 		System.out.println("Entered Frequency sampling");
 		this.matrixinput = matrix;
-		System.out.println("MATRIX SIZE!" + matrixinput.size());
 		create_weights();
 		calculateSample();
 		calculateOutputPatterns();
