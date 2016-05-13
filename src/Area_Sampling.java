@@ -14,12 +14,29 @@ import javax.sound.sampled.Port;
 public class Area_Sampling extends Sampling{
 	
 	
-
-
 	
-	public Area_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals) {
-		super(matrix, relevantEvals);
+	public Area_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals, int searchItem) {
+		super(matrix, relevantEvals, searchItem);
+ 
+	}
 	
+	/**
+	 * Area based
+	 * 
+	 * Creates a vector with the weight of each tuple
+	 * the weight is given by w = 2^(nb of items) - 1
+	 */
+	public void create_weights(){
+		calculateNTuples();
+		this.weights = new int[n_tuples];
+		for (int i=0; i<n_tuples;i++){
+			int w =matrixinput.get(i).size();
+			int we =(int) ((int) w*(Math.pow(2, w-1)));
+				
+			weights[i] =we;
+			powerSetSum = powerSetSum + we;
+		}
+		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
 	}
 
 	/**
@@ -32,6 +49,7 @@ public class Area_Sampling extends Sampling{
 	public LinkedList<Integer> calculateSubset(Integer sample_nb_itemset) {
 		LinkedList<Integer> itemset = matrixinput.get(sample_nb_itemset);
 		int nb_items = (int)itemset.size();
+		Integer indexOfSearchedItem=0;
 		//the list of the probabilities for each subset size
 		//each cell corresponds to its index size. example probabilityList[5] will be the probability of generating a subset of size 5
 		//probabilityList will have the range for which the size will be chosen given a random generated number
@@ -42,6 +60,9 @@ public class Area_Sampling extends Sampling{
 		for (int i=0;i<itemset.size();i++){
 			denominator=denominator + size;
 			size--;
+			if(itemset.get(i)==searchItem){
+				indexOfSearchedItem=i;
+			}
 		}
 		int marker=0;
 		System.out.println("Winner intervals for itemset " + sample_nb_itemset + ":" );
@@ -75,13 +96,22 @@ public class Area_Sampling extends Sampling{
 		    for (int i = 0; i < arr.length; i++) {
 		        arr[i] = i;
 		    }
+		    //Keeping in mind that if the searched item is no on the subset, the last index will be replaced with the searched item
+		    System.out.println("The shuffled array from which the first n indexes of items in the itemset will be picked is:");
 		    Collections.shuffle(Arrays.asList(arr));
 		    System.out.println(Arrays.toString(arr));
 		    
 		 //Copy the first n indexes to an arraylist to order them
 		    Integer[] arr_list = new Integer[subsetsize+1];
+		    boolean hasSearchedItem=false;
 		    for (int i = 0; i < subsetsize+1; i++) {
 		    	arr_list[i]=arr[i];
+		    	if(arr[i]==indexOfSearchedItem){
+		    		hasSearchedItem=true;
+		    	}
+		    }
+		    if(hasSearchedItem==false){
+		    	arr_list[subsetsize]=indexOfSearchedItem;
 		    }
 		   Arrays.sort(arr_list);
 		   

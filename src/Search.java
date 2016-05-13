@@ -1,17 +1,20 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Search {
 
 		//the matrix will be the full dataset to do the search on
-		LinkedList<LinkedList> matrix = new LinkedList<LinkedList>();
-	Integer searching =0;
-	LinkedList<LinkedList> searchResult = new LinkedList<LinkedList>();
+		private LinkedList<LinkedList> matrix;
+		private HashMapRKeys invertedMatrix;
+		private Integer searching =0;
+		private LinkedList<LinkedList> searchResult = new LinkedList<LinkedList>();
 	
 	
-	public Search(LinkedList<LinkedList> matrix2) {
+	public Search(LinkedList<LinkedList> matrix2, HashMapRKeys invertedM) {
 		this.matrix=matrix2;
-		System.out.println("MATRIX " + matrix.size());
+		this.invertedMatrix =invertedM;
+		System.out.println("Input Matrix size " + matrix.size());
 	}
 
 	/**
@@ -24,13 +27,11 @@ public class Search {
 		Scanner s = new Scanner(System.in);
 		searching=s.nextInt();
 		System.out.println("searching for " +searching);
-		for(int i=0; i<matrix.size();i++){
-			for(int j=0; j<matrix.get(i).size();j++){
-				if(matrix.get(i).get(j)==searching){
-					addtoSearchResults(i);
-					System.out.println("SEARCH RESULTS SIZE " + searchResult.size());
-				}
-			}
+		ArrayList<Integer> transactions = invertedMatrix.getItemTransactions(searching);
+		System.out.println("Itemsets that contain " + searching + ": "+ transactions);
+		for(int i=0; i<transactions.size();i++){
+				addtoSearchResults(transactions.get(i));
+				System.out.println("SEARCH RESULTS SIZE " + searchResult.size());
 		}
 	
 	}

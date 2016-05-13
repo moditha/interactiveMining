@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -61,7 +62,19 @@ public class Main {
 		}
 		System.out.println("Max columns: " + maxcol);
 **/		
-		Search search = new Search(matrix);
+		
+		//Create the vertical matrix - the indexes of each item
+		HashMapRKeys invertedM  = new HashMapRKeys();
+		for(int i=0;i < matrix.size(); i++){
+			for(int j=0;j<matrix.get(i).size();j++){
+				invertedM.addValue(matrix.get(i).get(j), i);
+			}
+		}
+		System.out.println("HASHMAP nb of keys: " + invertedM.size());
+		System.out.println("HASHMAP complete: " + invertedM.getMap());
+		
+		
+		Search search = new Search(matrix, invertedM);
 		
 		while(true){
 			//Do the search method that will ask the user the item he wants to search
@@ -94,17 +107,17 @@ public class Main {
 				   	answer= s1.nextInt();
 				   	if(answer==1){
 				   		//System.out.println("search result to sampling"+ SearchResult.size() + " " + SearchResult.get(0).size());
-				   		sampling= new Freq_Sampling(SearchResult,relevantFeedback);
+				   		sampling= new Freq_Sampling(SearchResult,relevantFeedback, searchItem);
 						sample=sampling.getSample();
 				   	}
 					if(answer==2){
-						sampling = new Area_Sampling(SearchResult,relevantFeedback);
+						sampling = new Area_Sampling(SearchResult,relevantFeedback, searchItem);
 						sample=sampling.getSample();
 					}
 	
 				}
 				
-				//for each subset retieved ask the user for feedback
+				//for each subset retrieved ask the user for feedback
 				UserEvaluation userEval= new UserEvaluation(sample, search.getSearchItem());
 				for (int i=0; i<userEval.getUserEvalList().size();i++){
 					evaluations.add(userEval.getUserEvalList().get(i));

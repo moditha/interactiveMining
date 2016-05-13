@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.Random;
 
-public class Sampling {
+public abstract class Sampling {
 	
 	protected LinkedList<LinkedList> matrixinput;
 	
@@ -11,9 +11,10 @@ public class Sampling {
 	protected int n_tuples=0;
 	protected int[] weights;
 	protected int powerSetSum=0;
+	protected int denominator=0;
 	protected LinkedList<Integer> sample;
 	protected LinkedList<Evaluation_Object> relevantFeedback;
-	
+	protected int searchItem;
 
 	
 	/**
@@ -21,35 +22,31 @@ public class Sampling {
 	 * According to the probability given by the weights creates a vector with the indexes of the tuples to be sampled - getSample()
 	 * Retrieves the tuples for sampling, creates a set for each and the respective powerset for each
 	 * @param matrix
+	 * @param searchItem 
 	 */
-	public Sampling (LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals) {
+	public Sampling (LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals, int searchItem) {
 		System.out.println("Entered Frequency sampling");
 		this.matrixinput = matrix;
 		this.relevantFeedback=relevantEvals;
+		this.searchItem=searchItem;
 		create_weights();
 		calculateSample();
 		calculateOutputPatterns();
 	}
 
 	/**
-	 * Frequency based
-	 * 
 	 * Creates a vector with the weight of each tuple
-	 * the weight is given by w = 2^(nb of items) - 1
 	 */
-	public void create_weights(){
-		calculateNTuples();
-		this.weights = new int[n_tuples];
-		for (int i=0; i<n_tuples;i++){
-			int w =matrixinput.get(i).size();
-			int we =(int) (Math.pow(2, w)-1);
-				
-			weights[i] =we;
-			powerSetSum = powerSetSum + we;
-		}
-		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
+	public abstract void create_weights();
+	/**
+	 * Given the relevant feedbacks it recalculates the weights
+	 * Furthermore the denominator needs to be updated for the probabilities to be normalized
+	 * This meaning, the denominator will no longer be the sum of the powersets but the sum of the updated weights
+	 */
+	public void update_weights(){
+		//NEEDS TO BE IMPLEMENTED STILL
 	}
- 
+	
 	
 	/**
 	 * Counts the number of tuples (lines) in the dataset
@@ -65,13 +62,12 @@ public class Sampling {
 	 */
 	public void calculateSample(){
 		Random r = new Random();
-		int desiredSampleSize =2;
 		int dist =0;
 		int samplesize=0;
 		this.sample = new LinkedList<Integer>();
 		for(int i =0; i< n_tuples;i++){
 			dist= r.nextInt(powerSetSum);
-			if (dist<weights[i]*desiredSampleSize){
+			if (dist<weights[i]){
 				sample.add(i);
 				samplesize++;
 				System.out.println("Samples has itemset number: " + i);
@@ -106,9 +102,7 @@ public class Sampling {
 	 * @param sample_nb_itemset - the location of the tuple in the input matrix (original data -all itemsets)
 	 * @return the subset calculated for the given itemset
 	 */
-	public LinkedList<Integer> calculateSubset(Integer sample_nb_itemset) {
-		return null;
-	}
+	public abstract LinkedList<Integer> calculateSubset(Integer sample_nb_itemset);
 	
 	public LinkedList<LinkedList> getSample(){
 		return interestingPatterns;

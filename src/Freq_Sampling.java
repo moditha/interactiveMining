@@ -12,10 +12,31 @@ public class Freq_Sampling extends Sampling{
 	
 
 
-	public Freq_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals) {
-		super(matrix, relevantEvals);
+	public Freq_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals, int searchItem) {
+		super(matrix, relevantEvals, searchItem);
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * Frequency based
+	 * 
+	 * Creates a vector with the weight of each tuple
+	 * the weight is given by w = 2^(nb of items)
+	 */
+	public void create_weights(){
+		calculateNTuples();
+		this.weights = new int[n_tuples];
+		for (int i=0; i<n_tuples;i++){
+			int w =matrixinput.get(i).size();
+			int we =(int) (Math.pow(2, w));
+				
+			weights[i] =we;
+			powerSetSum = powerSetSum + we;
+		}
+		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
+	}
+	
+	
 
 	/**
 	 * Given the number of the tuple (recorded in the sample matrix)it gets that tuple from the dataset
@@ -31,6 +52,10 @@ public class Freq_Sampling extends Sampling{
 		System.out.println("Sample itemset to generate a subset: ");
 		for (int i=0;i<itemset.size();i++){
 			outputListBinary[i]=r.nextInt(2);
+			//Makes sure the searched item is retrieved in the subset found
+			if(itemset.get(i)==searchItem){
+				outputListBinary[i]=1;
+			}
 			System.out.print(itemset.get(i) + " ");
 		}
 		System.out.println();
