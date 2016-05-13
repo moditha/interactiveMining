@@ -13,6 +13,10 @@ public class UserEvaluation {
 		askUserforEval();
 	}
 
+	/**
+	 * Given the sample retrieved ad showed to the user and the item he searched, it asks for each subset retreived the user's opionion
+	 * For each subset retrieved in the search it adds one object of Evaluation_object to a LinkedList that saves the user's input
+	 */
 	private void askUserforEval() {
 		
 		//needs better interface
@@ -27,6 +31,11 @@ public class UserEvaluation {
 		}
 		
 	}
+	
+	/**
+	 * Gets the LinkedList with all the user feedbacks for the subsets he saw for a given search
+	 * @return the user feedback
+	 */
 	public LinkedList<Evaluation_Object> getUserEvalList(){
 		return evaluations;
 	}

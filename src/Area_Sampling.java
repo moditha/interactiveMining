@@ -17,8 +17,8 @@ public class Area_Sampling extends Sampling{
 
 
 	
-	public Area_Sampling(LinkedList<LinkedList> matrix) {
-		super(matrix);
+	public Area_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals) {
+		super(matrix, relevantEvals);
 	
 	}
 

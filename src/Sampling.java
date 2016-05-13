@@ -12,7 +12,7 @@ public class Sampling {
 	protected int[] weights;
 	protected int powerSetSum=0;
 	protected LinkedList<Integer> sample;
-	
+	protected LinkedList<Evaluation_Object> relevantFeedback;
 	
 
 	
@@ -22,9 +22,10 @@ public class Sampling {
 	 * Retrieves the tuples for sampling, creates a set for each and the respective powerset for each
 	 * @param matrix
 	 */
-	public Sampling (LinkedList<LinkedList> matrix) {
+	public Sampling (LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals) {
 		System.out.println("Entered Frequency sampling");
 		this.matrixinput = matrix;
+		this.relevantFeedback=relevantEvals;
 		create_weights();
 		calculateSample();
 		calculateOutputPatterns();
@@ -101,9 +102,7 @@ public class Sampling {
 	}
 	
 	/**
-	 * Given the number of the tuple (recorded in the sample matrix)it gets that tuple from the dataset
-	 * Randomly calculates a binary matrix with each item of the tuple and a 50-50 chance of it being in the choosen subset
-	 * This way, all the subsets of the powerset have the same probability of being chosen, regardless of its size
+	 *Defined for each of the sampling algorithms (frequency based and area based)
 	 * @param sample_nb_itemset - the location of the tuple in the input matrix (original data -all itemsets)
 	 * @return the subset calculated for the given itemset
 	 */

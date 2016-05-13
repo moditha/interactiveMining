@@ -64,8 +64,21 @@ public class Main {
 		Search search = new Search(matrix);
 		
 		while(true){
+			//Do the search method that will ask the user the item he wants to search
+			//Retrieves a linkedList with the tuples found in the search
 			search.doSearch();
 			SearchResult=search.getResult();
+			
+			
+			//Searched the evaluation LinkedList to check which evaluations are relevant for this new pattern sampling
+			//The ones which the searched item is the same are added to a LikedList of EvaluationObjects
+			int searchItem = search.getSearchItem();
+			LinkedList<Evaluation_Object> relevantFeedback = new LinkedList<Evaluation_Object>();
+			for(int i=0;i<evaluations.size();i++){
+				if(evaluations.get(i).getSearch()==searchItem){
+					relevantFeedback.add(evaluations.get(i));
+				}
+			}
 			
 			//Choose algorithm
 				System.out.println("Do you want to use Frequency based Sampling or Area based Sampling?");
@@ -81,16 +94,17 @@ public class Main {
 				   	answer= s1.nextInt();
 				   	if(answer==1){
 				   		//System.out.println("search result to sampling"+ SearchResult.size() + " " + SearchResult.get(0).size());
-				   		Freq_Sampling sampling1= new Freq_Sampling(SearchResult);
-						sample=sampling1.getSample();
+				   		sampling= new Freq_Sampling(SearchResult,relevantFeedback);
+						sample=sampling.getSample();
 				   	}
 					if(answer==2){
-						Area_Sampling sampling2 = new Area_Sampling(SearchResult);
-						sample=sampling2.getSample();
+						sampling = new Area_Sampling(SearchResult,relevantFeedback);
+						sample=sampling.getSample();
 					}
 	
 				}
-	
+				
+				//for each subset retieved ask the user for feedback
 				UserEvaluation userEval= new UserEvaluation(sample, search.getSearchItem());
 				for (int i=0; i<userEval.getUserEvalList().size();i++){
 					evaluations.add(userEval.getUserEvalList().get(i));

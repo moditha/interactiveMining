@@ -14,7 +14,10 @@ public class Search {
 		System.out.println("MATRIX " + matrix.size());
 	}
 
-	
+	/**
+	 * Asks for a item to the user, to do the search and for each itemset with tah item calls addtosearchresults in order to add that tuple in the results
+	 * Given that item it adds to the Searchresults all the tuples that contain that item
+	 */
 	public void doSearch(){
 		searchResult = new LinkedList<>();
 		System.out.println("Which item are you looking for?");
@@ -34,6 +37,10 @@ public class Search {
 	
 	
 
+	/**
+	 * GIven an index, it goes to the dataset and copies it to the search results
+	 * @param i - the index of the tuple to be retrieved, in given dataset
+	 */
 	private void addtoSearchResults(int i) {
 		LinkedList<Integer> tuple = new LinkedList<>();
 		System.out.println("Tuple added to search results:");
@@ -46,9 +53,19 @@ public class Search {
 		System.out.println();
 		
 	}
+	
+	/**
+	 * Retrieves a linkedlist with all the tuples that contain the searched item
+	 * @return the search result
+	 */
 	public LinkedList<LinkedList> getResult(){
 		return searchResult;
 	}
+	
+	/**
+	 * Retrieves the item the user inputed as search item
+	 * @return the item searched
+	 */
 	public Integer getSearchItem(){
 		return searching;
 	}

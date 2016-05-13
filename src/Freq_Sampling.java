@@ -12,8 +12,8 @@ public class Freq_Sampling extends Sampling{
 	
 
 
-	public Freq_Sampling(LinkedList<LinkedList> matrix) {
-		super(matrix);
+	public Freq_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals) {
+		super(matrix, relevantEvals);
 		// TODO Auto-generated constructor stub
 	}
 
