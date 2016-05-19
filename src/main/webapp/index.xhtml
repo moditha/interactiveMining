@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<link
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+		rel="stylesheet"></link>
+	<link href='http://fonts.googleapis.com/css?family=Raleway'
+		rel='stylesheet' type='text/css' />
+	<link
+		href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'
+		rel='stylesheet' type='text/css' />
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		
+	<title>Interactive Pattern Mining</title>
+
+	<style>
+		body {
+			font-family: 'Raleway', serif;
+			margin-top:4%;
+		}
+		
+		h1, h2, h3, h4 {
+			font-family: 'Raleway', serif;
+		}
+		
+		.resultsTable {
+			margin-top:2%;
+		}	
+		
+		.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
+		    border-style: none;
+		    text-align:left;
+		}
+	
+		.selection > table {
+			width: 100%;
+		}
+		
+		.selection > table > tbody > tr {
+		    width: 100%;
+		} 
+		
+		.selection > table > tbody > tr > td > label {
+		    margin-left: 3%;
+		} 
+		
+		/*.table td {
+		   text-align: center;   
+		}*/
+		
+		.sampling-type {
+			margin-bottom:3%;
+		}
+		
+		.sampling-type > tbody > tr > td > label {
+			margin:0px 7px;
+		}
+	
+		.resultsTable > thead > tr > th:nth-child(2) {
+			text-align:right;
+			width:20% !important;
+		}
+		
+		.feedback {
+			margin-left: 12%;
+		}
+	</style>
+
+</h:head>
+
+<h:body>
+	<h:form id="searchForm" prependId="false">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="col-md-4">
+					<h4>Interactive Pattern Mining</h4>
+					
+					<h:selectOneRadio styleClass="sampling-type" id="sampling" value="#{searchBean.samplingType}" required="true">
+					  <f:selectItems value="#{searchBean.samplingTypes}" />
+					</h:selectOneRadio>
+					
+					<p>Which item are you looking for?</p>	
+					
+					<div class="form-group">
+						
+						<div class="input-group">
+							<h:inputText value="#{searchBean.pattern}"
+								styleClass="form-control" id="pattern" type="text" name="pattern"
+								maxlength="100" placeholder="Search a pattern" />
+	
+							<span class="input-group-btn"> 
+								<h:commandButton value="Search" styleClass="btn btn-default">
+									<f:ajax execute="@form" listener="#{searchBean.search}"
+										render="@form" />
+								</h:commandButton>
+							</span>
+						</div>
+						
+					</div>
+				</div>
+				<div class="col-md-4"></div>
+				</div>
+					
+					<!-- Show results -->
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-8">
+							<h:panelGroup id="searchResults" styleClass="results">
+								<h:panelGroup rendered="#{not empty searchBean.sample}">
+	
+									<p:dataTable rowIndexVar="rowId" id="resultsTable" tableStyleClass="resultsTable table table-striped"
+										var="sample" value="#{searchBean.sample}">
+										
+									<p:column headerText="Itemset">
+										<div style="float:left;">
+											<ui:repeat var="item" value="#{sample}">
+												<h:outputText value="#{item}  " />
+											</ui:repeat>
+										</div>
+									</p:column>
+									
+									<p:column headerText="Relevant itemset?">
+										<p:commandLink value="Yes" styleClass="feedback btn btn-success">
+											<p:ajax listener="#{searchBean.userEvaluation(rowId, true)}" />
+										</p:commandLink>
+										<p:commandLink value="No" styleClass="feedback btn btn-danger">
+											<p:ajax listener="#{searchBean.userEvaluation(rowId, false)}" />
+										</p:commandLink>
+									</p:column>
+	
+									</p:dataTable>
+	
+								</h:panelGroup>
+							</h:panelGroup>
+	
+						</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+	</h:form>
+</h:body>
+
+</html>

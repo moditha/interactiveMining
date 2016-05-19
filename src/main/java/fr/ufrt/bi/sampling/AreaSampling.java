@@ -1,23 +1,16 @@
+package fr.ufrt.bi.sampling;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
-import javax.sound.sampled.Port;
+import fr.ufrt.bi.evaluators.Evaluation;
 
-public class Area_Sampling extends Sampling{
+public class AreaSampling extends Sampling{
 	
-	
-	
-	public Area_Sampling(LinkedList<LinkedList> matrix, LinkedList<Evaluation_Object> relevantEvals, int searchItem) {
+	public AreaSampling(LinkedList<LinkedList<Integer>> matrix, LinkedList<Evaluation> relevantEvals, int searchItem) {
 		super(matrix, relevantEvals, searchItem);
- 
 	}
 	
 	/**
@@ -28,13 +21,15 @@ public class Area_Sampling extends Sampling{
 	 */
 	public void create_weights(){
 		calculateNTuples();
-		this.weights = new int[n_tuples];
-		for (int i=0; i<n_tuples;i++){
-			int w =matrixinput.get(i).size();
-			int we =(int) ((int) w*(Math.pow(2, w-1)));
+		
+		this.weights = new int[datasetSize];
+
+		for (int i=0; i<datasetSize;i++){
+			int itemsetSize = dataset.get(i).size();
+			int weight = (int) ((int) itemsetSize*(Math.pow(2, itemsetSize-1)));
 				
-			weights[i] =we;
-			powerSetSum = powerSetSum + we;
+			weights[i] =weight;
+			powerSetSum = powerSetSum + weight;
 		}
 		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
 	}
@@ -47,7 +42,7 @@ public class Area_Sampling extends Sampling{
 	 * @param sample_nb_itemset - the location of the tuple in the input matrix (original data -all itemsets)
 	 */
 	public LinkedList<Integer> calculateSubset(Integer sample_nb_itemset) {
-		LinkedList<Integer> itemset = matrixinput.get(sample_nb_itemset);
+		LinkedList<Integer> itemset = dataset.get(sample_nb_itemset);
 		int nb_items = (int)itemset.size();
 		Integer indexOfSearchedItem=0;
 		//the list of the probabilities for each subset size
@@ -60,7 +55,7 @@ public class Area_Sampling extends Sampling{
 		for (int i=0;i<itemset.size();i++){
 			denominator=denominator + size;
 			size--;
-			if(itemset.get(i)==searchItem){
+			if(itemset.get(i)==searchedItem){
 				indexOfSearchedItem=i;
 			}
 		}
@@ -131,10 +126,4 @@ public class Area_Sampling extends Sampling{
 		System.out.println(length);
 		**/
 	}
-
-
-	
-
-
-	
 }
