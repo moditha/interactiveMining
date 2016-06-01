@@ -85,6 +85,9 @@ public class SearchBean {
 		this.sampling.calculateOutputPatterns();
 		
 		this.setPatterns(sampling.getPatterns());
+		if (this.getPatterns().size() == 0) {
+			this.getPatternsFromSample();
+		}
 	}
 	
 	public void userEvaluation(int patternIndex, boolean feedback) {

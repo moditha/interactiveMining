@@ -28,7 +28,8 @@ public abstract class Sampling {
 	protected int[] positives;
 	protected int[] negatives;
 	
-	private final double euler = 0.5772156649;
+	//private final double euler = 0.5772156649;
+	private final double euler = 2;
 	/**
 	 * Create the weights for each tuple - createWeights()
 	 * According to the probability given by the weights creates a vector with the indexes of the tuples to be sampled - getSample()
@@ -61,8 +62,7 @@ public abstract class Sampling {
 	 */
 	public void updateWeights(){
 		for (int transaction=0; transaction<weights.length; transaction++) {
-			//weights[transaction] = weights[transaction] + BigDecimal.valueOf(Math.pow(euler, (positives[transaction] - negatives[transaction])));
-			BigInteger updatedWeight = BigInteger.valueOf((long) Math.pow(euler, (positives[transaction] - negatives[transaction])));
+			BigInteger updatedWeight = weights[transaction].add(BigInteger.valueOf((long) Math.pow(euler, (positives[transaction] - negatives[transaction]))));
 			if (weights[transaction].compareTo(updatedWeight) > 0) {
 				BigInteger updatePowerSet = weights[transaction].subtract(updatedWeight);
 				this.powerSetSum = this.powerSetSum.subtract(updatePowerSet);

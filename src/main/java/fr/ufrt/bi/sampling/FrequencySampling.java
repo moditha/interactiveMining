@@ -33,7 +33,6 @@ public class FrequencySampling extends Sampling {
 				
 			weights[i] = weight;
 			powerSetSum = powerSetSum.add(weight);
-			// = powerSetSum + weight;
 			positives[i] = 0;
 			negatives[i] = 0;
 		}
