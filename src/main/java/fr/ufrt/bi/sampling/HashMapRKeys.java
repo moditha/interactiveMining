@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class HashMapRKeys {
 
@@ -33,19 +34,30 @@ public class HashMapRKeys {
 	 * @return
 	 */
 	public ArrayList<Integer> getTransactionsItems(int[] items) {
-		ArrayList<Set<Integer>> transactions = new ArrayList<Set<Integer>>();
-
-
+//		ArrayList<Set<Integer>> transactions = new ArrayList<Set<Integer>>();
+//
+//
+//		for (int item : items) {
+//			Set<Integer> set = new HashSet<Integer>(hashMap.get(item));
+//			transactions.add(set);
+//		}
+//
+//		Set<Integer> intersectedTransactions = transactions.get(0);
+//		for (int i = 1; i < transactions.size(); i++) {
+//			intersectedTransactions.retainAll(transactions.get(i));
+//		}
+//		return new ArrayList<Integer>(intersectedTransactions);
+		
+		Set<Integer> trans = new TreeSet<Integer>();
+		int i = 0;
 		for (int item : items) {
-			Set<Integer> set = new HashSet<Integer>(hashMap.get(item));
-			transactions.add(set);
+			if(i==0)
+				trans.addAll(hashMap.get(item));
+			else
+			trans.retainAll(hashMap.get(item));
+			i++;
 		}
-
-		Set<Integer> intersectedTransactions = transactions.get(0);
-		for (int i = 1; i < transactions.size(); i++) {
-			intersectedTransactions.retainAll(transactions.get(i));
-		}
-		return new ArrayList<Integer>(intersectedTransactions);
+		return new ArrayList<Integer>(trans);
 	}
 
 	protected int size() {
