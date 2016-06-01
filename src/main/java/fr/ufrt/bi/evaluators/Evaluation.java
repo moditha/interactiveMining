@@ -4,12 +4,12 @@ import java.util.LinkedList;
 public class Evaluation {
 	
 	private int search;
-	private LinkedList<Integer> sampleEvaluated;
+	private LinkedList<Integer> pattern;
 	private boolean eval;
 	
-	public Evaluation(int search, LinkedList<Integer> sampleEvaluated, boolean eval){
+	public Evaluation(int search, LinkedList<Integer> pattern, boolean eval){
 		this.search = search;
-		this.sampleEvaluated = sampleEvaluated;
+		this.pattern = pattern;
 		this.eval = eval;
 	}
 	
@@ -17,8 +17,8 @@ public class Evaluation {
 		return search;
 	}
 	
-	public LinkedList<Integer> getSample(){
-		return sampleEvaluated;
+	public LinkedList<Integer> getPattern(){
+		return pattern;
 	}
 	
 	public boolean getEval(){

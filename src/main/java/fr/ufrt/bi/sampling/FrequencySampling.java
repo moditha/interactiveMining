@@ -1,5 +1,7 @@
 package fr.ufrt.bi.sampling;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -7,27 +9,33 @@ import fr.ufrt.bi.evaluators.Evaluation;
 
 public class FrequencySampling extends Sampling {
 	
-	public FrequencySampling(LinkedList<LinkedList<Integer>> dataset, LinkedList<Evaluation> relevantEvals, int searchItem) {
-		super(dataset, relevantEvals, searchItem);
+	public FrequencySampling(HashMap<Integer, Integer> transactionIndexMap, LinkedList<LinkedList<Integer>> dataset, LinkedList<Evaluation> relevantEvals, int searchItem) {
+		super(transactionIndexMap, dataset, relevantEvals, searchItem);
 	}
 	
 	/**
 	 * Frequency based
 	 * 
 	 * Creates a vector with the weight of each tuple
-	 * the weight is given by w = 2^(nb of items)
+	 * the weight is given by w = 2^(nb of items)-1
 	 */
-	public void create_weights(){
-		calculateNTuples();
+	public void createWeights(){
+		calculateNumberOfTuples();
 		
-		this.weights = new int[datasetSize];
+		this.weights = new BigInteger[searchResultsSize];
 		
-		for (int i=0; i<datasetSize;i++){
-			int itemsetSize = dataset.get(i).size();
-			int weight = (int) (Math.pow(2, itemsetSize));
+		this.positives = new int[searchResultsSize];
+		this.negatives = new int[searchResultsSize];
+
+		for (int i=0; i<searchResultsSize;i++){
+			int itemsetSize = transactions.get(i).size();
+			BigInteger weight = BigInteger.valueOf((long) (Math.pow(2, itemsetSize)-1));
 				
 			weights[i] = weight;
-			powerSetSum = powerSetSum + weight;
+			powerSetSum = powerSetSum.add(weight);
+			// = powerSetSum + weight;
+			positives[i] = 0;
+			negatives[i] = 0;
 		}
 		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
 	}
@@ -40,7 +48,7 @@ public class FrequencySampling extends Sampling {
 	 * @return the subset calculated for the given itemset
 	 */
 	public LinkedList<Integer> calculateSubset(Integer sampleIndex) {
-		LinkedList<Integer> itemset = dataset.get(sampleIndex);
+		LinkedList<Integer> itemset = transactions.get(sampleIndex);
 		int[] outputListBinary = new int[(int)itemset.size()];
 		
 		Random r = new Random();

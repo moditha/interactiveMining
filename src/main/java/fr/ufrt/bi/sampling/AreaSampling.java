@@ -1,7 +1,9 @@
 package fr.ufrt.bi.sampling;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -9,8 +11,8 @@ import fr.ufrt.bi.evaluators.Evaluation;
 
 public class AreaSampling extends Sampling{
 	
-	public AreaSampling(LinkedList<LinkedList<Integer>> matrix, LinkedList<Evaluation> relevantEvals, int searchItem) {
-		super(matrix, relevantEvals, searchItem);
+	public AreaSampling(HashMap<Integer, Integer> transactionIndexMap, LinkedList<LinkedList<Integer>> matrix, LinkedList<Evaluation> relevantEvals, int searchItem) {
+		super(transactionIndexMap, matrix, relevantEvals, searchItem);
 	}
 	
 	/**
@@ -19,17 +21,26 @@ public class AreaSampling extends Sampling{
 	 * Creates a vector with the weight of each tuple
 	 * the weight is given by w = 2^(nb of items) - 1
 	 */
-	public void create_weights(){
-		calculateNTuples();
+	public void createWeights(){
+		calculateNumberOfTuples();
 		
-		this.weights = new int[datasetSize];
+		this.weights = new BigInteger[searchResultsSize];
+		
+		this.positives = new int[searchResultsSize];
+		this.negatives = new int[searchResultsSize];
 
-		for (int i=0; i<datasetSize;i++){
-			int itemsetSize = dataset.get(i).size();
-			int weight = (int) ((int) itemsetSize*(Math.pow(2, itemsetSize-1)));
+		for (int i=0; i<searchResultsSize;i++){
+			int itemsetSize = transactions.get(i).size();
+			BigInteger weight = BigInteger.valueOf((long) (Math.pow(2, itemsetSize)-1));
+			
+			weights[i] = weight;
+			powerSetSum.add(weight);
+			/*int weight = (int) ((int) itemsetSize*(Math.pow(2, itemsetSize-1)));
 				
 			weights[i] =weight;
-			powerSetSum = powerSetSum + weight;
+			powerSetSum = powerSetSum + weight*/;
+			positives[i] = 0;
+			negatives[i] = 0;
 		}
 		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
 	}
@@ -42,7 +53,7 @@ public class AreaSampling extends Sampling{
 	 * @param sample_nb_itemset - the location of the tuple in the input matrix (original data -all itemsets)
 	 */
 	public LinkedList<Integer> calculateSubset(Integer sample_nb_itemset) {
-		LinkedList<Integer> itemset = dataset.get(sample_nb_itemset);
+		LinkedList<Integer> itemset = transactions.get(sample_nb_itemset);
 		int nb_items = (int)itemset.size();
 		Integer indexOfSearchedItem=0;
 		//the list of the probabilities for each subset size

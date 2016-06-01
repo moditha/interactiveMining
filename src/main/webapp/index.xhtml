@@ -117,25 +117,25 @@
 						<div class="col-md-2"></div>
 						<div class="col-md-8">
 							<h:panelGroup id="searchResults" styleClass="results">
-								<h:panelGroup rendered="#{not empty searchBean.sample}">
+								<h:panelGroup rendered="#{not empty searchBean.patterns}">
 	
 									<p:dataTable rowIndexVar="rowId" id="resultsTable" tableStyleClass="resultsTable table table-striped"
-										var="sample" value="#{searchBean.sample}">
+										var="pattern" value="#{searchBean.patterns}">
 										
-									<p:column headerText="Itemset">
+									<p:column headerText="Patterns">
 										<div style="float:left;">
-											<ui:repeat var="item" value="#{sample}">
+											<ui:repeat var="item" value="#{pattern}">
 												<h:outputText value="#{item}  " />
 											</ui:repeat>
 										</div>
 									</p:column>
 									
-									<p:column headerText="Relevant itemset?">
+									<p:column headerText="Relevant pattern?">
 										<p:commandLink value="Yes" styleClass="feedback btn btn-success">
-											<p:ajax listener="#{searchBean.userEvaluation(rowId, true)}" />
+											<p:ajax listener="#{searchBean.userEvaluation(rowId, true)}" update="@form" />
 										</p:commandLink>
 										<p:commandLink value="No" styleClass="feedback btn btn-danger">
-											<p:ajax listener="#{searchBean.userEvaluation(rowId, false)}" />
+											<p:ajax listener="#{searchBean.userEvaluation(rowId, false)}" update="@form" />
 										</p:commandLink>
 									</p:column>
 	
