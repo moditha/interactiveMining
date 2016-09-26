@@ -1,10 +1,10 @@
 package fr.ufrt.bi.sampling;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class HashMapRKeys {
 
@@ -18,7 +18,7 @@ public class HashMapRKeys {
 		}
 		if (tempList == null)
 			tempList = new ArrayList<Integer>();
-		
+
 		tempList.add(value);
 		hashMap.put(item, tempList);
 	}
@@ -30,34 +30,52 @@ public class HashMapRKeys {
 	@SuppressWarnings("unchecked")
 	/**
 	 * Gets the intersection of transactions that contains all items
+	 * 
 	 * @param items
 	 * @return
 	 */
 	public ArrayList<Integer> getTransactionsItems(int[] items) {
-//		ArrayList<Set<Integer>> transactions = new ArrayList<Set<Integer>>();
-//
-//
-//		for (int item : items) {
-//			Set<Integer> set = new HashSet<Integer>(hashMap.get(item));
-//			transactions.add(set);
-//		}
-//
-//		Set<Integer> intersectedTransactions = transactions.get(0);
-//		for (int i = 1; i < transactions.size(); i++) {
-//			intersectedTransactions.retainAll(transactions.get(i));
-//		}
-//		return new ArrayList<Integer>(intersectedTransactions);
-		
-		Set<Integer> trans = new TreeSet<Integer>();
-		int i = 0;
-		for (int item : items) {
-			if(i==0)
-				trans.addAll(hashMap.get(item));
-			else
-			trans.retainAll(hashMap.get(item));
-			i++;
+		ArrayList<Set<Integer>> transactions = new ArrayList<Set<Integer>>();
+
+		if (items == null) {
+
+			System.out.println("Items is null");
+			for (int item : hashMap.keySet()) {
+				//System.out.println(hashMap.get(item));
+				Set<Integer> set = new HashSet<Integer>(hashMap.get(item));
+				transactions.add(set);
+			}
+			
 		}
-		return new ArrayList<Integer>(trans);
+
+		else {
+			for (int item : items) {
+				if (hashMap.get(item) != null) {
+					Set<Integer> set = new HashSet<Integer>(hashMap.get(item));
+					
+					transactions.add(set);
+				}
+				else
+					transactions.add(Collections.emptySet());
+			}
+		}
+
+		Set<Integer> intersectedTransactions = new HashSet<>();
+		if (!transactions.isEmpty()) {
+		//	System.out.println("FUUUUUCK");
+			intersectedTransactions = transactions.get(0);
+			for (int i = 1; i < transactions.size(); i++) {
+			//	 System.out.println(intersectedTransactions);
+				if(items == null){
+					intersectedTransactions.addAll(transactions.get(i));
+				}
+				else{
+				intersectedTransactions.retainAll(transactions.get(i));
+				}
+			}
+		}
+		//System.out.println("Final is "+ intersectedTransactions);
+		return new ArrayList<Integer>(intersectedTransactions);
 	}
 
 	protected int size() {

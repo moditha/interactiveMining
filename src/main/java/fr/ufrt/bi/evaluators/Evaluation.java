@@ -1,13 +1,13 @@
 package fr.ufrt.bi.evaluators;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Evaluation {
 	
 	private int search;
-	private LinkedList<Integer> pattern;
+	private ArrayList<Integer> pattern;
 	private boolean eval;
 	
-	public Evaluation(int search, LinkedList<Integer> pattern, boolean eval){
+	public Evaluation(int search, ArrayList<Integer> pattern, boolean eval){
 		this.search = search;
 		this.pattern = pattern;
 		this.eval = eval;
@@ -17,7 +17,7 @@ public class Evaluation {
 		return search;
 	}
 	
-	public LinkedList<Integer> getPattern(){
+	public ArrayList<Integer> getPattern(){
 		return pattern;
 	}
 	
